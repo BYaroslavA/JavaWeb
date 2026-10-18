@@ -7,18 +7,12 @@
 %>
 
 <div class="card timestamp-card">
-    <h3>Сервіс генерації часових міток (Д.З.)</h3>
-    <p style="margin: 0; font-size: 0.95rem; color: #374151;">Поточні системні мітки часу в двох форматах:</p>
-    <div class="timestamp-grid">
-        <div class="timestamp-item">
-            <span class="timestamp-label">Точність до секунди (10 цифр)</span>
-            <span class="timestamp-value"><%= ts10 != null ? ts10 : "N/A" %></span>
-        </div>
-        <div class="timestamp-item">
-            <span class="timestamp-label">Точність до мілісекунди (13 цифр)</span>
-            <span class="timestamp-value"><%= ts13 != null ? ts13 : "N/A" %></span>
-        </div>
-    </div>
+    <h3>Сервіс часу (Timestamp Service)</h3>
+    <p>Мітка часу у двох форматах:</p>
+    <ul>
+        <li>10 цифр (точність до секунди): <span class="timestamp-value"><%= ts10 != null ? ts10 : "N/A" %></span></li>
+        <li>13 цифр (точність до мілісекунди): <span class="timestamp-value"><%= ts13 != null ? ts13 : "N/A" %></span></li>
+    </ul>
 </div>
 
 <div class="card">

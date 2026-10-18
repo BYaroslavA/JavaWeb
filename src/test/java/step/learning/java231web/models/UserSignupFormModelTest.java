@@ -18,11 +18,11 @@ public class UserSignupFormModelTest {
     @Test
     public void testValidModelPassesValidation() {
         UserSignupFormModel model = new UserSignupFormModel(
-                "Максим Шевченко",
-                "maksym.sh@example.com",
-                "maksym_dev",
-                "SecurePass123",
-                "SecurePass123",
+                "Иван Иванов",
+                "ivan.ivanov@example.com",
+                "ivan_231",
+                "Password123",
+                "Password123",
                 true
         );
 
@@ -33,7 +33,7 @@ public class UserSignupFormModelTest {
 
     @Test
     public void testNullNameThrowsException() {
-        UserSignupFormModel model = new UserSignupFormModel(null, "maksym@example.com");
+        UserSignupFormModel model = new UserSignupFormModel(null, "ivan@example.com");
 
         assertFalse(model.isValid());
         Map<String, String> errors = model.getValidationErrors();
@@ -43,8 +43,8 @@ public class UserSignupFormModelTest {
 
     @Test
     public void testEmptyAndBlankNameFails() {
-        UserSignupFormModel model1 = new UserSignupFormModel("", "maksym@example.com");
-        UserSignupFormModel model2 = new UserSignupFormModel("   ", "maksym@example.com");
+        UserSignupFormModel model1 = new UserSignupFormModel("", "ivan@example.com");
+        UserSignupFormModel model2 = new UserSignupFormModel("   ", "ivan@example.com");
 
         assertFalse(model1.isValid());
         assertFalse(model2.isValid());
@@ -54,7 +54,7 @@ public class UserSignupFormModelTest {
 
     @Test
     public void testShortNameFails() {
-        UserSignupFormModel model = new UserSignupFormModel("M", "maksym@example.com");
+        UserSignupFormModel model = new UserSignupFormModel("A", "ivan@example.com");
 
         assertFalse(model.isValid());
         assertTrue(model.getValidationErrors().containsKey("name"));
@@ -63,7 +63,7 @@ public class UserSignupFormModelTest {
 
     @Test
     public void testNullEmailFails() {
-        UserSignupFormModel model = new UserSignupFormModel("Дмитро", null);
+        UserSignupFormModel model = new UserSignupFormModel("Олександр", null);
 
         assertFalse(model.isValid());
         assertTrue(model.getValidationErrors().containsKey("email"));
@@ -72,10 +72,10 @@ public class UserSignupFormModelTest {
 
     @Test
     public void testInvalidEmailFormatFails() {
-        String[] invalidEmails = {"notanemail", "client@", "@domain.org", "test@domain", "test@.net"};
+        String[] invalidEmails = {"notanemail", "user@", "@domain.com", "user@domain", "user@.com"};
 
         for (String invalidEmail : invalidEmails) {
-            UserSignupFormModel model = new UserSignupFormModel("Дмитро", invalidEmail);
+            UserSignupFormModel model = new UserSignupFormModel("Олександр", invalidEmail);
             assertFalse(model.isValid(), "Email should be invalid: " + invalidEmail);
             assertTrue(model.getValidationErrors().containsKey("email"));
             assertThrows(IllegalArgumentException.class, model::validate);
@@ -85,9 +85,9 @@ public class UserSignupFormModelTest {
     @Test
     public void testValidLoginFormatPasses() {
         UserSignupFormModel model = new UserSignupFormModel(
-                "Дмитро",
-                "dmytro@test.ua",
-                "dima_231"
+                "Олександр",
+                "oleksandr@example.com",
+                "admin_231"
         );
 
         assertTrue(model.isValid());
@@ -97,61 +97,62 @@ public class UserSignupFormModelTest {
     @Test
     public void testShortLoginFormatFails() {
         UserSignupFormModel model = new UserSignupFormModel(
-                "Дмитро",
-                "dmytro@test.ua",
-                "dm"
+                "Олександр",
+                "oleksandr@example.com",
+                "ab"
         );
 
         assertFalse(model.isValid());
         assertTrue(model.getValidationErrors().containsKey("login"));
+        assertThrows(IllegalArgumentException.class, model::validate);
     }
 
     @Test
     public void testInvalidCharactersInLoginFails() {
         UserSignupFormModel model = new UserSignupFormModel(
-                "Дмитро",
-                "dmytro@test.ua",
-                "user#$%"
+                "Олександр",
+                "oleksandr@example.com",
+                "user 123!"
         );
 
         assertFalse(model.isValid());
         assertTrue(model.getValidationErrors().containsKey("login"));
-    }
-
-    @Test
-    public void testShortPasswordFails() {
-        UserSignupFormModel model = new UserSignupFormModel(
-                "Дмитро",
-                "dmytro@test.ua",
-                "pass1",
-                "pass1",
-                true
-        );
-
-        assertFalse(model.isValid());
-        assertTrue(model.getValidationErrors().containsKey("password"));
+        assertThrows(IllegalArgumentException.class, model::validate);
     }
 
     @Test
     public void testPasswordMismatchFails() {
         UserSignupFormModel model = new UserSignupFormModel(
-                "Дмитро",
-                "dmytro@test.ua",
-                "Secret123",
-                "Secret999",
+                "Олександр",
+                "oleksandr@example.com",
+                "secret123",
+                "secret321",
                 true
         );
 
         assertFalse(model.isValid());
         assertTrue(model.getValidationErrors().containsKey("repeatPassword"));
+        assertThrows(IllegalArgumentException.class, model::validate);
+    }
+
+    @Test
+    public void testShortPasswordFails() {
+        UserSignupFormModel model = new UserSignupFormModel(
+                "Олександр",
+                "oleksandr@example.com",
+                "123",
+                "123",
+                true
+        );
+
+        assertFalse(model.isValid());
+        assertTrue(model.getValidationErrors().containsKey("password"));
+        assertThrows(IllegalArgumentException.class, model::validate);
     }
 
     @Test
     public void testUserDaoRejectsNullAndInvalidModelBeforeDatabaseCall() {
-        IDbService mockDb = () -> {
-            throw new AssertionError("Database should not be accessed for invalid model");
-        };
-        UserDao userDao = new UserDao(mockDb);
+        UserDao userDao = new UserDao(null);
 
         assertThrows(IllegalArgumentException.class, () -> userDao.signupUser(null));
 
@@ -161,37 +162,35 @@ public class UserSignupFormModelTest {
 
     @Test
     public void testLoginUniquenessValidationInUserDao() throws SQLException {
-        IDbService mockDb = () -> createMockConnection("existing_user");
-        UserDao userDao = new UserDao(mockDb);
+        IDbService mockDbService = createMockDbService("admin");
+        UserDao userDao = new UserDao(mockDbService);
+
+        assertFalse(userDao.isLoginAvailable("admin"), "Existing login 'admin' should not be available");
+        assertTrue(userDao.isLoginAvailable("new_user_231"), "New login should be available");
 
         UserSignupFormModel duplicateModel = new UserSignupFormModel(
-                "Тарас",
-                "taras.new@example.com",
-                "existing_user",
-                "Secret123",
-                "Secret123",
-                true
+                "Тестовий Користувач",
+                "test@example.com",
+                "admin"
         );
 
-        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> {
-            userDao.signupUser(duplicateModel);
-        });
+        IllegalArgumentException ex = assertThrows(
+                IllegalArgumentException.class,
+                () -> userDao.signupUser(duplicateModel)
+        );
         assertTrue(ex.getMessage().contains("вже зайнятий"));
 
         UserSignupFormModel availableModel = new UserSignupFormModel(
-                "Андрій",
-                "andriy@example.com",
-                "andriy_unique",
-                "Secret123",
-                "Secret123",
-                true
+                "Тестовий Користувач",
+                "unique@example.com",
+                "new_user_231"
         );
 
         assertDoesNotThrow(() -> userDao.signupUser(availableModel));
     }
 
-    private Connection createMockConnection(String takenLogin) {
-        return (Connection) Proxy.newProxyInstance(
+    private IDbService createMockDbService(final String takenLogin) {
+        return () -> (Connection) Proxy.newProxyInstance(
                 Connection.class.getClassLoader(),
                 new Class<?>[]{Connection.class},
                 (proxy, method, args) -> {

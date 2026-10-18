@@ -2,248 +2,90 @@
 <%
     String contextPath = request.getContextPath();
 %>
-<div class="card back-container">
-    <div class="back-header">
-        <h2>Випробування HTTP-методів запиту</h2>
-        <p class="back-subtitle">
-            Інструмент для перевірки передачі та коректної обробки даних на бекенді усіма стандартними методами протоколу HTTP.
-        </p>
+<div class="card">
+    <h2>Випробування HTTP-методів (/back)</h2>
+    <p>Тестування передачі даних усіма HTTP-методами запиту до сервлета <code>BackServlet</code>.</p>
+
+    <div style="margin-top: 16px;">
+        <label for="requestPayload" style="display: block; font-weight: bold; margin-bottom: 6px;">
+            Тіло запиту / Параметр:
+        </label>
+        <input type="text" id="requestPayload" value="Hello HTTP" 
+               style="width: 100%; max-width: 450px; padding: 8px 12px; border: 1px solid #ccc; border-radius: 4px; font-family: monospace;" />
     </div>
 
-    <div class="http-grid">
-        <div class="method-card get-card">
-            <div class="method-card-header">
-                <span class="method-badge badge-get">GET</span>
-                <span class="method-desc">Отримання даних (Query Parameters)</span>
-            </div>
-            <div class="method-card-body">
-                <label for="get-param" class="input-label">Параметри запиту (URL query):</label>
-                <input type="text" id="get-param" class="method-input" value="mode=test&timestamp=now&author=student">
-                <button type="button" id="btn-get" class="btn btn-get" onclick="sendRequest('GET')">
-                    Випробувати GET
-                </button>
-            </div>
-        </div>
-
-        <div class="method-card post-card">
-            <div class="method-card-header">
-                <span class="method-badge badge-post">POST</span>
-                <span class="method-desc">Створення ресурсу (JSON Body)</span>
-            </div>
-            <div class="method-card-body">
-                <label for="post-body" class="input-label">Тіло запиту (JSON):</label>
-                <textarea id="post-body" class="method-textarea" rows="3">{
-  "action": "create_item",
-  "title": "Новий елемент",
-  "priority": 1
-}</textarea>
-                <button type="button" id="btn-post" class="btn btn-post" onclick="sendRequest('POST')">
-                    Випробувати POST
-                </button>
-            </div>
-        </div>
-
-        <div class="method-card put-card">
-            <div class="method-card-header">
-                <span class="method-badge badge-put">PUT</span>
-                <span class="method-desc">Повне оновлення ресурсу (JSON Body)</span>
-            </div>
-            <div class="method-card-body">
-                <label for="put-body" class="input-label">Тіло запиту (JSON):</label>
-                <textarea id="put-body" class="method-textarea" rows="3">{
-  "id": 101,
-  "title": "Повністю оновлений елемент",
-  "status": "updated",
-  "version": 2
-}</textarea>
-                <button type="button" id="btn-put" class="btn btn-put" onclick="sendRequest('PUT')">
-                    Випробувати PUT
-                </button>
-            </div>
-        </div>
-
-        <div class="method-card patch-card">
-            <div class="method-card-header">
-                <span class="method-badge badge-patch">PATCH</span>
-                <span class="method-desc">Часткове оновлення (JSON Body)</span>
-            </div>
-            <div class="method-card-body">
-                <label for="patch-body" class="input-label">Тіло запиту (JSON):</label>
-                <textarea id="patch-body" class="method-textarea" rows="3">{
-  "id": 101,
-  "status": "patched_value"
-}</textarea>
-                <button type="button" id="btn-patch" class="btn btn-patch" onclick="sendRequest('PATCH')">
-                    Випробувати PATCH
-                </button>
-            </div>
-        </div>
-
-        <div class="method-card delete-card">
-            <div class="method-card-header">
-                <span class="method-badge badge-delete">DELETE</span>
-                <span class="method-desc">Видалення ресурсу (ID / Query)</span>
-            </div>
-            <div class="method-card-body">
-                <label for="delete-param" class="input-label">Параметри видалення (query):</label>
-                <input type="text" id="delete-param" class="method-input" value="id=101&reason=cleanup">
-                <button type="button" id="btn-delete" class="btn btn-delete" onclick="sendRequest('DELETE')">
-                    Випробувати DELETE
-                </button>
-            </div>
-        </div>
-
-        <div class="method-card options-card">
-            <div class="method-card-header">
-                <span class="method-badge badge-options">OPTIONS</span>
-                <span class="method-desc">Опитування можливостей (Allow methods)</span>
-            </div>
-            <div class="method-card-body">
-                <p class="method-note">Перевіряє доступні HTTP-методи та CORS-заголовки сервера.</p>
-                <button type="button" id="btn-options" class="btn btn-options" onclick="sendRequest('OPTIONS')">
-                    Випробувати OPTIONS
-                </button>
-            </div>
-        </div>
-
-        <div class="method-card head-card">
-            <div class="method-card-header">
-                <span class="method-badge badge-head">HEAD</span>
-                <span class="method-desc">Отримання заголовків без тіла відповіді</span>
-            </div>
-            <div class="method-card-body">
-                <p class="method-note">Сервер повертає лише метадані та заголовки (без передачі тіла).</p>
-                <button type="button" id="btn-head" class="btn btn-head" onclick="sendRequest('HEAD')">
-                    Випробувати HEAD
-                </button>
-            </div>
-        </div>
-    </div>
-
-    <div class="test-all-bar">
-        <button type="button" id="btn-test-all" class="btn btn-primary" onclick="testAllMethods()">
-            Випробувати всі методи по черзі
+    <div style="margin-top: 16px; display: flex; gap: 8px; flex-wrap: wrap;">
+        <button id="btnGet" onclick="sendRequest('GET')" style="padding: 8px 16px; cursor: pointer; border-radius: 4px; border: 1px solid #0284c7; background: #0284c7; color: white; font-weight: bold;">
+            GET
         </button>
-        <button type="button" id="btn-clear-console" class="btn btn-secondary" onclick="clearResults()">
-            Очистити результат
+        <button id="btnPost" onclick="sendRequest('POST')" style="padding: 8px 16px; cursor: pointer; border-radius: 4px; border: 1px solid #16a34a; background: #16a34a; color: white; font-weight: bold;">
+            POST
+        </button>
+        <button id="btnPut" onclick="sendRequest('PUT')" style="padding: 8px 16px; cursor: pointer; border-radius: 4px; border: 1px solid #ea580c; background: #ea580c; color: white; font-weight: bold;">
+            PUT
+        </button>
+        <button id="btnPatch" onclick="sendRequest('PATCH')" style="padding: 8px 16px; cursor: pointer; border-radius: 4px; border: 1px solid #7c3aed; background: #7c3aed; color: white; font-weight: bold;">
+            PATCH
+        </button>
+        <button id="btnDelete" onclick="sendRequest('DELETE')" style="padding: 8px 16px; cursor: pointer; border-radius: 4px; border: 1px solid #dc2626; background: #dc2626; color: white; font-weight: bold;">
+            DELETE
         </button>
     </div>
+</div>
 
-    <div class="response-panel">
-        <div class="response-panel-header">
-            <div class="response-title">
-                Результат відповіді сервера:
-                <span id="response-status-badge" class="response-status-badge status-idle">Очікування запиту</span>
-            </div>
-            <div id="response-time" class="response-time"></div>
-        </div>
-
-        <div class="response-section">
-            <div class="section-title">Отримані заголовки (Headers):</div>
-            <pre id="response-headers" class="code-block">(заголовки з'являться після виконання запиту)</pre>
-        </div>
-
-        <div class="response-section">
-            <div class="section-title">Тіло відповіді сервера (JSON / Body):</div>
-            <pre id="response-body" class="code-block">(тіло відповіді з'явиться після виконання запиту)</pre>
-        </div>
+<div class="card" style="margin-top: 16px;">
+    <h3>Результат запиту:</h3>
+    <div style="margin-top: 8px;">
+        <p><b>Останній виконаний метод:</b> <span id="resMethod" style="font-family: monospace; font-weight: bold;">-</span></p>
+        <p><b>Статус відповіді:</b> <span id="resStatus" style="font-family: monospace;">-</span></p>
+        <p style="margin-top: 8px;"><b>Передані дані:</b></p>
+        <pre id="sentData" style="background: #f8fafc; border: 1px solid #e2e8f0; padding: 10px; border-radius: 4px; font-size: 0.9em; min-height: 24px; overflow-x: auto;">-</pre>
+        <p style="margin-top: 8px;"><b>Отримана відповідь сервера (JSON):</b></p>
+        <pre id="resBody" style="background: #f8fafc; border: 1px solid #e2e8f0; padding: 10px; border-radius: 4px; font-size: 0.9em; min-height: 48px; overflow-x: auto;">Натисніть будь-яку кнопку вище для відправки запиту.</pre>
     </div>
 </div>
 
 <script>
-    const baseUrl = '<%= contextPath %>/back';
+function sendRequest(method) {
+    const payloadInput = document.getElementById("requestPayload").value;
+    const resMethod = document.getElementById("resMethod");
+    const resStatus = document.getElementById("resStatus");
+    const sentData = document.getElementById("sentData");
+    const resBody = document.getElementById("resBody");
 
-    async function sendRequest(method) {
-        const statusBadge = document.getElementById('response-status-badge');
-        const timeBox = document.getElementById('response-time');
-        const headersBox = document.getElementById('response-headers');
-        const bodyBox = document.getElementById('response-body');
+    resMethod.innerText = method;
+    resStatus.innerText = "Відправка запиту...";
+    resBody.innerText = "Очікування...";
 
-        statusBadge.className = 'response-status-badge status-loading';
-        statusBadge.textContent = 'Відправка ' + method + '...';
-        headersBox.textContent = 'Очікування...';
-        bodyBox.textContent = 'Очікування...';
-        timeBox.textContent = '';
-
-        let url = baseUrl;
-        const options = {
-            method: method,
-            headers: {
-                'Accept': 'application/json'
-            }
-        };
-
-        if (method === 'GET') {
-            const query = document.getElementById('get-param').value.trim();
-            if (query) {
-                url += (query.startsWith('?') ? '' : '?') + query + '&ajax=true';
-            } else {
-                url += '?ajax=true';
-            }
-        } else if (method === 'DELETE') {
-            const query = document.getElementById('delete-param').value.trim();
-            if (query) {
-                url += (query.startsWith('?') ? '' : '?') + query;
-            }
-        } else if (method === 'POST') {
-            options.headers['Content-Type'] = 'application/json; charset=utf-8';
-            options.body = document.getElementById('post-body').value;
-        } else if (method === 'PUT') {
-            options.headers['Content-Type'] = 'application/json; charset=utf-8';
-            options.body = document.getElementById('put-body').value;
-        } else if (method === 'PATCH') {
-            options.headers['Content-Type'] = 'application/json; charset=utf-8';
-            options.body = document.getElementById('patch-body').value;
+    let url = "<%= contextPath %>/back";
+    let options = {
+        method: method,
+        headers: {
+            "Accept": "application/json"
         }
+    };
 
-        const startTime = performance.now();
-
-        try {
-            const resp = await fetch(url, options);
-            const duration = Math.round(performance.now() - startTime);
-
-            statusBadge.textContent = method + ' → ' + resp.status + ' ' + resp.statusText;
-            statusBadge.className = 'response-status-badge ' + (resp.ok ? 'status-ok' : 'status-err');
-            timeBox.textContent = 'Час відповіді: ' + duration + ' ms';
-
-            let headerText = '';
-            for (let [name, val] of resp.headers.entries()) {
-                headerText += name + ': ' + val + '\n';
-            }
-            headersBox.textContent = headerText || '(Немає доступних заголовків)';
-
-            if (method === 'HEAD') {
-                bodyBox.textContent = '(За специфікацією HTTP метод HEAD не повертає тіло. Заголовки отримано успішно!)';
-            } else {
-                const text = await resp.text();
-                try {
-                    const parsed = JSON.parse(text);
-                    bodyBox.textContent = JSON.stringify(parsed, null, 2);
-                } catch {
-                    bodyBox.textContent = text || '(Порожня відповідь)';
-                }
-            }
-        } catch (err) {
-            statusBadge.textContent = 'Помилка мережі';
-            statusBadge.className = 'response-status-badge status-err';
-            bodyBox.textContent = 'Помилка виконання fetch: ' + err.message;
-            headersBox.textContent = '-';
-        }
+    if (method === "GET") {
+        url += "?data=" + encodeURIComponent(payloadInput) + "&raw=1";
+        sentData.innerText = "URL Parameter: data=" + payloadInput;
+    } else {
+        options.headers["Content-Type"] = "application/json; charset=UTF-8";
+        const jsonBody = JSON.stringify({ message: payloadInput, timestamp: Date.now() });
+        options.body = jsonBody;
+        sentData.innerText = "HTTP Body (JSON): " + jsonBody;
     }
 
-    async function testAllMethods() {
-        const methods = ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS', 'HEAD'];
-        for (const m of methods) {
-            await sendRequest(m);
-            await new Promise(r => setTimeout(r, 600));
-        }
-    }
-
-    function clearResults() {
-        document.getElementById('response-status-badge').className = 'response-status-badge status-idle';
-        document.getElementById('response-status-badge').textContent = 'Очікування запиту';
-        document.getElementById('response-time').textContent = '';
-        document.getElementById('response-headers').textContent = '(заголовки з\'являться після виконання запиту)';
-        document.getElementById('response-body').textContent = '(тіло відповіді з\'явиться після виконання запиту)';
-    }
+    fetch(url, options)
+        .then(response => {
+            resStatus.innerText = response.status + " " + response.statusText;
+            return response.json();
+        })
+        .then(data => {
+            resBody.innerText = JSON.stringify(data, null, 2);
+        })
+        .catch(error => {
+            resStatus.innerText = "Помилка виконання";
+            resBody.innerText = error.toString();
+        });
+}
 </script>

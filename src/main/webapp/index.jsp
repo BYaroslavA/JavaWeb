@@ -3,10 +3,10 @@
 <%
     String viewName = (String) request.getAttribute("servlet");
     if(viewName == null) {
-        viewName = "home.jsp";
+        viewName = "/home.jsp";
     }
     else {
-        viewName = viewName.toLowerCase() + ".jsp";
+        viewName = "/" + viewName.toLowerCase() + ".jsp";
     }
     Charset charset = (Charset) request.getAttribute("charset");
     String charsetName = charset == null ? "undefined" : charset.name();
@@ -27,17 +27,17 @@
             <nav>
                 <a href="<%= contextPath %>/">Головна</a>
                 <a href="<%= contextPath %>/about">About</a>
-                <a href="<%= contextPath %>/privacy">Privacy</a>
                 <a href="<%= contextPath %>/gson">Gson API</a>
                 <a href="<%= contextPath %>/db">DB</a>
-                <a href="<%= contextPath %>/back">Back (/back)</a>
+                <a href="<%= contextPath %>/back">Back API</a>
+                <a href="<%= contextPath %>/admin/">Admin</a>
             </nav>
         </header>
         <main>
             <jsp:include page="<%= viewName %>" />
         </main>
         <footer>
-            Java 231 Web &bull; <a href="<%= contextPath %>/privacy">Політика конфіденційності</a> &bull; Кодування: <b><%= charsetName %></b> &bull; Auth: <b><%= request.getAttribute("auth") %></b>
+            Java 231 Web &bull; Кодування: <b><%= charsetName %></b> &bull; Auth: <b><%= request.getAttribute("auth") %></b>
         </footer>
     </body>
 </html>

@@ -21,11 +21,15 @@ public class IocServletsModule extends ServletModule {
         filter("/*").through( AuthFilter.class     );
 
         serve("/"     ).with( HomeServlet.class  );
-        serve("/about"  ).with( AboutServlet.class   );
-        serve("/privacy").with( PrivacyServlet.class );
-        serve("/gson"   ).with( GsonServlet.class    );
-        serve("/db"     ).with( DbServlet.class      );
-        serve("/back"   ).with( BackServlet.class    );
+        serve("/about").with( AboutServlet.class );
+        serve("/gson" ).with( GsonServlet.class  );
+        serve("/db"   ).with( DbServlet.class    );
+        serve("/back" ).with( BackServlet.class  );
+        serve("/admin", "/admin/*").with( AdminServlet.class );
+        serve("/user", "/user/*", "/User/*").with( UserServlet.class );
+        serve("/section", "/section/*").with( ProductSectionServlet.class );
+        serve("/product", "/product/*").with( ProductServlet.class );
+        serve("/storage", "/storage/*").with( StorageServlet.class );
     }
 
 }

@@ -10,6 +10,10 @@ import java.sql.Statement;
 import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import step.learning.java231web.models.UserAccessItem;
 import step.learning.java231web.models.UserSignupFormModel;
 import step.learning.java231web.services.db.IDbService;
 
@@ -17,6 +21,7 @@ import step.learning.java231web.services.db.IDbService;
 public class UserDao {
     private final IDbService dbService;
     private final Logger logger;
+    private boolean isInstalled = false;
 
     @Inject
     public UserDao(IDbService dbService) {
@@ -29,18 +34,123 @@ public class UserDao {
         this.logger = logger;
     }
 
+    public synchronized void ensureInstalled() {
+        if (isInstalled || dbService == null) {
+            return;
+        }
+        try {
+            install();
+            isInstalled = true;
+            seedIfEmpty();
+        } catch (Exception ex) {
+            logger.log(Level.WARNING, "Auto install or seed error", ex);
+        }
+    }
+
     public void install() throws SQLException {
+        if (dbService == null) {
+            return;
+        }
         String sql = "CREATE TABLE IF NOT EXISTS user ("
                 + "id CHAR(36) PRIMARY KEY, "
                 + "name VARCHAR(128) NOT NULL, "
                 + "email VARCHAR(128) NOT NULL, "
                 + "login VARCHAR(64) NULL, "
+                + "role VARCHAR(32) DEFAULT 'user', "
                 + "created_at DATETIME DEFAULT CURRENT_TIMESTAMP, "
                 + "deleted_at DATETIME NULL"
                 + ")";
         try (Statement statement = dbService.getConnection().createStatement()) {
             statement.executeUpdate(sql);
+            try {
+                statement.executeUpdate("ALTER TABLE user ADD COLUMN login VARCHAR(64) NULL");
+            } catch (SQLException ignored) {}
+            try {
+                statement.executeUpdate("ALTER TABLE user ADD COLUMN role VARCHAR(32) DEFAULT 'user'");
+            } catch (SQLException ignored) {}
+            try {
+                statement.executeUpdate("ALTER TABLE user ADD COLUMN created_at DATETIME DEFAULT CURRENT_TIMESTAMP");
+            } catch (SQLException ignored) {}
+            try {
+                statement.executeUpdate("ALTER TABLE user ADD COLUMN deleted_at DATETIME NULL");
+            } catch (SQLException ignored) {}
         }
+    }
+
+    private void seedIfEmpty() {
+        try {
+            if (getUsersCount() == 0) {
+                String insertSql = "INSERT INTO user (id, name, email, login, role) VALUES (?, ?, ?, ?, ?)";
+                try (PreparedStatement prep = dbService.getConnection().prepareStatement(insertSql)) {
+                    String[][] initialUsers = {
+                            {"Administrator", "admin@example.com", "admin", "admin"},
+                            {"Moderator", "mod@example.com", "moderator", "moderator"},
+                            {"Іван Петренко", "ivan@example.com", "ivan", "user"},
+                            {"Олена Коваль", "olena@example.com", "olena", "user"},
+                            {"Максим Шевченко", "maks@example.com", "maksim", "user"},
+                            {"Гість Системи", "guest@example.com", "guest", "guest"}
+                    };
+                    for (String[] u : initialUsers) {
+                        prep.setString(1, UUID.randomUUID().toString());
+                        prep.setString(2, u[0]);
+                        prep.setString(3, u[1]);
+                        prep.setString(4, u[2]);
+                        prep.setString(5, u[3]);
+                        prep.executeUpdate();
+                    }
+                }
+            }
+        } catch (Exception ex) {
+            logger.log(Level.INFO, "Skipping seed: " + ex.getMessage());
+        }
+    }
+
+    public int getUsersCount() throws SQLException {
+        if (dbService == null) {
+            return 0;
+        }
+        ensureInstalled();
+        String countSql = "SELECT COUNT(*) FROM user WHERE deleted_at IS NULL";
+        try (Statement stmt = dbService.getConnection().createStatement();
+             ResultSet rs = stmt.executeQuery(countSql)) {
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+        }
+        return 0;
+    }
+
+    public List<UserAccessItem> getUsersAccess(int page, int perPage) throws SQLException {
+        if (dbService == null) {
+            return Collections.emptyList();
+        }
+        ensureInstalled();
+        int pageNumber = page < 1 ? 1 : page;
+        int itemsPerPage = perPage < 1 ? 5 : perPage;
+        int skipRows = (pageNumber - 1) * itemsPerPage;
+
+        String selectSql = "SELECT id, COALESCE(login, name) AS login, COALESCE(role, 'user') AS role, name, email "
+                + "FROM user WHERE deleted_at IS NULL "
+                + "ORDER BY created_at DESC "
+                + "LIMIT ? OFFSET ?";
+
+        List<UserAccessItem> userItems = new ArrayList<>();
+        try (PreparedStatement ps = dbService.getConnection().prepareStatement(selectSql)) {
+            ps.setInt(1, itemsPerPage);
+            ps.setInt(2, skipRows);
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    userItems.add(new UserAccessItem(
+                            rs.getString("id"),
+                            rs.getString("login"),
+                            rs.getString("role"),
+                            rs.getString("name"),
+                            rs.getString("email")
+                    ));
+                }
+            }
+        }
+        return userItems;
     }
 
     public boolean isLoginAvailable(String login) throws SQLException {

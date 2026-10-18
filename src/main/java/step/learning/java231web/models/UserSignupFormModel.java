@@ -6,7 +6,6 @@ import java.util.Map;
 import java.util.regex.Pattern;
 
 public class UserSignupFormModel {
-
     private static final Pattern EMAIL_PATTERN = Pattern.compile(
             "^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$"
     );
@@ -113,33 +112,33 @@ public class UserSignupFormModel {
         Map<String, String> errors = new LinkedHashMap<>();
 
         if (name == null || name.trim().isEmpty()) {
-            errors.put("name", "Поле імені обов'язкове для заповнення");
+            errors.put("name", "Ім'я не може бути порожнім");
         } else if (name.trim().length() < 2) {
-            errors.put("name", "Ім'я занадто коротке (потрібно від 2 символів)");
+            errors.put("name", "Ім'я повинно містити щонайменше 2 символи");
         } else if (!NAME_PATTERN.matcher(name.trim()).matches()) {
-            errors.put("name", "Ім'я містить некоректні символи");
+            errors.put("name", "Ім'я містить неприпустимі символи");
         }
 
         if (email == null || email.trim().isEmpty()) {
-            errors.put("email", "Вкажіть контактний email");
+            errors.put("email", "Email не може бути порожнім");
         } else if (!EMAIL_PATTERN.matcher(email.trim()).matches()) {
-            errors.put("email", "Введено некоректний формат email адреси");
+            errors.put("email", "Некоректний формат email");
         }
 
         if (login != null && !login.trim().isEmpty()) {
             if (login.trim().length() < 3) {
-                errors.put("login", "Логін має містити щонайменше 3 символи");
+                errors.put("login", "Логін повинен містити щонайменше 3 символи");
             } else if (!LOGIN_PATTERN.matcher(login.trim()).matches()) {
-                errors.put("login", "Логін містить неприпустимі знаки");
+                errors.put("login", "Логін містить неприпустимі символи");
             }
         }
 
         if (password != null) {
             if (password.length() < 6) {
-                errors.put("password", "Пароль має складатись як мінімум із 6 символів");
+                errors.put("password", "Пароль повинен містити щонайменше 6 символів");
             }
             if (repeatPassword != null && !password.equals(repeatPassword)) {
-                errors.put("repeatPassword", "Введені паролі не збігаються");
+                errors.put("repeatPassword", "Паролі не збігаються");
             }
         }
 

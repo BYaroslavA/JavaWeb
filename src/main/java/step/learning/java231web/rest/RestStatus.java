@@ -42,21 +42,20 @@ public class RestStatus {
     public static final RestStatus ServiceUnavailable = new RestStatus(false, 503, "Service Unavailable");
     public static final RestStatus GatewayTimeout = new RestStatus(false, 504, "Gateway Timeout");
 
+    // ----- NON STANDARD --------
     public static final RestStatus HeaderRequired = new RestStatus(false, 440, "Header Required");
     public static final RestStatus HeaderMalformed = new RestStatus(false, 441, "Header Malformed");
     public static final RestStatus QueryParameterRequired = new RestStatus(false, 442, "Query Parameter Required");
+    public static final RestStatus QueryParameterMalformed = new RestStatus(false, 443, "Query Parameter Malformed");
+    public static final RestStatus TokenRequired = new RestStatus(false, 444, "Token Required");
+    public static final RestStatus TokenExpired = new RestStatus(false, 445, "Token Expired");
+    public static final RestStatus TokenMalformed = new RestStatus(false, 446, "Token Malformed");
+    public static final RestStatus ValidationFailed = new RestStatus(false, 447, "Validation Failed");
+    public static final RestStatus LoginOccupied = new RestStatus(false, 448, "Login Occupied");
+    public static final RestStatus AccountLocked = new RestStatus(false, 449, "Account Locked");
 
-    public static final RestStatus QueryParamInvalid = new RestStatus(false, 443, "Query Parameter Invalid");
-    public static final RestStatus AuthTokenMissing = new RestStatus(false, 444, "Auth Token Missing");
-    public static final RestStatus AuthTokenExpired = new RestStatus(false, 445, "Auth Token Expired");
-    public static final RestStatus AuthTokenInvalid = new RestStatus(false, 446, "Auth Token Invalid");
-    public static final RestStatus ModelValidationFailed = new RestStatus(false, 447, "Model Validation Failed");
-    public static final RestStatus UserAlreadyExists = new RestStatus(false, 448, "User Already Exists");
-    public static final RestStatus CaptchaRequired = new RestStatus(false, 449, "Captcha Verification Required");
-    public static final RestStatus AccountDeactivated = new RestStatus(false, 450, "Account Deactivated");
-
-    public static final RestStatus DbExecutionFailed = new RestStatus(false, 550, "Database Execution Failed");
-    public static final RestStatus ThirdPartyServiceError = new RestStatus(false, 551, "Third-Party Service Error");
+    public static final RestStatus DatabaseError = new RestStatus(false, 550, "Database Error");
+    public static final RestStatus ExternalServiceUnavailable = new RestStatus(false, 551, "External Service Unavailable");
 
     public boolean isOk() {
         return isOk;

@@ -83,36 +83,32 @@ public class RestStatusTest {
 
     @Test
     public void testProposedNonStandardStatusesForHomework() {
-        assertFalse(RestStatus.QueryParamInvalid.isOk());
-        assertEquals(443, RestStatus.QueryParamInvalid.getCode());
-        assertEquals("Query Parameter Invalid", RestStatus.QueryParamInvalid.getMessage());
+        assertFalse(RestStatus.QueryParameterMalformed.isOk());
+        assertEquals(443, RestStatus.QueryParameterMalformed.getCode());
 
-        assertFalse(RestStatus.AuthTokenMissing.isOk());
-        assertEquals(444, RestStatus.AuthTokenMissing.getCode());
+        assertFalse(RestStatus.TokenRequired.isOk());
+        assertEquals(444, RestStatus.TokenRequired.getCode());
 
-        assertFalse(RestStatus.AuthTokenExpired.isOk());
-        assertEquals(445, RestStatus.AuthTokenExpired.getCode());
+        assertFalse(RestStatus.TokenExpired.isOk());
+        assertEquals(445, RestStatus.TokenExpired.getCode());
 
-        assertFalse(RestStatus.AuthTokenInvalid.isOk());
-        assertEquals(446, RestStatus.AuthTokenInvalid.getCode());
+        assertFalse(RestStatus.TokenMalformed.isOk());
+        assertEquals(446, RestStatus.TokenMalformed.getCode());
 
-        assertFalse(RestStatus.ModelValidationFailed.isOk());
-        assertEquals(447, RestStatus.ModelValidationFailed.getCode());
+        assertFalse(RestStatus.ValidationFailed.isOk());
+        assertEquals(447, RestStatus.ValidationFailed.getCode());
 
-        assertFalse(RestStatus.UserAlreadyExists.isOk());
-        assertEquals(448, RestStatus.UserAlreadyExists.getCode());
+        assertFalse(RestStatus.LoginOccupied.isOk());
+        assertEquals(448, RestStatus.LoginOccupied.getCode());
 
-        assertFalse(RestStatus.CaptchaRequired.isOk());
-        assertEquals(449, RestStatus.CaptchaRequired.getCode());
+        assertFalse(RestStatus.AccountLocked.isOk());
+        assertEquals(449, RestStatus.AccountLocked.getCode());
 
-        assertFalse(RestStatus.AccountDeactivated.isOk());
-        assertEquals(450, RestStatus.AccountDeactivated.getCode());
+        assertFalse(RestStatus.DatabaseError.isOk());
+        assertEquals(550, RestStatus.DatabaseError.getCode());
 
-        assertFalse(RestStatus.DbExecutionFailed.isOk());
-        assertEquals(550, RestStatus.DbExecutionFailed.getCode());
-
-        assertFalse(RestStatus.ThirdPartyServiceError.isOk());
-        assertEquals(551, RestStatus.ThirdPartyServiceError.getCode());
+        assertFalse(RestStatus.ExternalServiceUnavailable.isOk());
+        assertEquals(551, RestStatus.ExternalServiceUnavailable.getCode());
     }
 
     @Test

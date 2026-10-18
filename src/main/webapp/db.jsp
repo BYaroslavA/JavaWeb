@@ -40,19 +40,19 @@
     <p><code><%= paramResult %></code></p>
 </div>
 
-<div class="card uuid-card" style="margin-top: 16px;">
-    <h3>Формування UUID у базі даних MySQL (Д.З.)</h3>
-    <p>Виконаний SQL-запит:</p>
-    <p><code><%= sqlQuery != null ? sqlQuery : "SELECT UUID() AS uuid;" %></code></p>
+<div class="card timestamp-card" style="margin-top: 16px;">
+    <h3>База даних (MySQL) - Формування UUID (Д.З.)</h3>
+    <p>SQL-запит для формування UUID:</p>
+    <p><code><%= sqlQuery != null ? sqlQuery : "SELECT UUID();" %></code></p>
 
     <% if (Boolean.TRUE.equals(dbSuccess)) { %>
         <p style="margin-top: 12px;">Результат виконання запиту:</p>
         <div style="margin-top: 8px;">
-            <b>Згенерований ідентифікатор:</b>
-            <span class="uuid-value"><%= uuid != null ? uuid : "" %></span>
+            <b>Згенерований UUID:</b>
+            <span class="timestamp-value"><%= uuid != null ? uuid : "" %></span>
         </div>
-        <p class="uuid-success-note">
-            З'єднання з базою даних активне. Значення сформовано успішно.
+        <p style="margin-top: 10px; color: #166534; font-size: 0.9em;">
+            З'єднання з базою даних успішно встановлено.
         </p>
     <% } else { %>
         <div style="margin-top: 12px; color: #b91c1c;">
@@ -62,4 +62,15 @@
             </p>
         </div>
     <% } %>
+</div>
+
+<div class="card" style="margin-top: 16px;">
+    <h2>Параметри підключення</h2>
+    <ul>
+        <li>СУБД: <b>MySQL</b></li>
+        <li>База даних: <code>java_231</code></li>
+        <li>Користувач: <code>user_231j</code></li>
+        <li>SQL запит: <code>SELECT UUID();</code></li>
+        <li>Контроль проходження сервлету: <b><%= request.getAttribute("servlet") %></b></li>
+    </ul>
 </div>
