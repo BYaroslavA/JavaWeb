@@ -267,18 +267,56 @@
 
                                                     <td class="admin-form-col">
                                                         <h2>Product Version</h2>
+                                                        <%
+                                                            java.util.Map<String, String> versionErrors = (java.util.Map<String, String>) request.getAttribute("versionValidationErrors");
+                                                            java.util.Map<String, String> versionFields = (java.util.Map<String, String>) request.getAttribute("versionFormFields");
+
+                                                            String vProductIdVal = versionFields != null && versionFields.get("product-id") != null ? versionFields.get("product-id") : "";
+                                                            String vTitleVal = versionFields != null && versionFields.get("product-title") != null ? versionFields.get("product-title") : "";
+                                                            String vDescVal = versionFields != null && versionFields.get("product-description") != null ? versionFields.get("product-description") : "";
+                                                            String vSlugVal = versionFields != null && versionFields.get("product-slug") != null ? versionFields.get("product-slug") : "";
+                                                            String vPriceVal = versionFields != null && versionFields.get("product-price") != null ? versionFields.get("product-price") : "";
+                                                            String vStockVal = versionFields != null && versionFields.get("product-stock") != null ? versionFields.get("product-stock") : "";
+                                                            String vOrderVal = versionFields != null && versionFields.get("product-order") != null ? versionFields.get("product-order") : "";
+
+                                                            String vProductIdErr = versionErrors != null ? versionErrors.get("product-id") : null;
+                                                            String vTitleErr = versionErrors != null ? versionErrors.get("product-title") : null;
+                                                            String vDescErr = versionErrors != null ? versionErrors.get("product-description") : null;
+                                                            String vSlugErr = versionErrors != null ? versionErrors.get("product-slug") : null;
+                                                            String vPriceErr = versionErrors != null ? versionErrors.get("product-price") : null;
+                                                            String vStockErr = versionErrors != null ? versionErrors.get("product-stock") : null;
+                                                            String vOrderErr = versionErrors != null ? versionErrors.get("product-order") : null;
+                                                            String vImageErr = versionErrors != null ? versionErrors.get("product-image") : null;
+                                                        %>
+
+                                                        <% if (versionErrors != null && !versionErrors.isEmpty()) { %>
+                                                            <div style="background: #fdf2e9; border: 1px solid #e74c3c; color: #c0392b; padding: 12px; border-radius: 6px; margin-bottom: 15px;">
+                                                                <b>Помилки валідації версії товару:</b>
+                                                                <ul style="margin: 8px 0 0 20px; padding: 0;">
+                                                                    <% for (java.util.Map.Entry<String, String> err : versionErrors.entrySet()) { %>
+                                                                        <li><b><%= err.getKey() %></b>: <%= err.getValue() %></li>
+                                                                    <% } %>
+                                                                </ul>
+                                                            </div>
+                                                        <% } %>
+
                                                         <form action="product-version" method="post"
                                                             enctype="multipart/form-data" class="admin-form">
                                                             <div class="admin-form-group">
                                                                 <label for="version-product-id">Виберіть товар:</label>
-                                                                <select id="version-product-id" name="product-id">
+                                                                <select id="version-product-id" name="product-id"
+                                                                    style="border: <%= vProductIdErr != null ? "1.5px solid #e74c3c; background-color: #fff6f6;" : "" %>">
                                                                     <% for(ProductSection ps :
                                                                         viewModel.getProductSections()) { %>
-                                                                        <option value="<%= ps.getId() %>">
+                                                                        <option value="<%= ps.getId() %>"
+                                                                            <%= ps.getId().equals(vProductIdVal) ? "selected" : "" %>>
                                                                             <%= ps.getTitle() %>
                                                                         </option>
                                                                         <% } %>
                                                                 </select>
+                                                                <% if (vProductIdErr != null) { %>
+                                                                    <div style="color: #c0392b; font-size: 0.85rem; margin-top: 4px; font-weight: 500;">&#9888; <%= vProductIdErr %></div>
+                                                                <% } %>
                                                             </div>
 
                                                             <div class="admin-form-group">
@@ -286,7 +324,12 @@
                                                                     товару:</label>
                                                                 <input type="text" id="version-title"
                                                                     name="product-title"
-                                                                    placeholder="Наприклад: Cosmic Red / 256GB" />
+                                                                    value="<%= vTitleVal %>"
+                                                                    placeholder="Наприклад: Cosmic Red / 256GB"
+                                                                    style="border: <%= vTitleErr != null ? "1.5px solid #e74c3c; background-color: #fff6f6;" : "" %>" />
+                                                                <% if (vTitleErr != null) { %>
+                                                                    <div style="color: #c0392b; font-size: 0.85rem; margin-top: 4px; font-weight: 500;">&#9888; <%= vTitleErr %></div>
+                                                                <% } %>
                                                             </div>
 
                                                             <div class="admin-form-group">
@@ -294,14 +337,24 @@
                                                                     товару:</label>
                                                                 <input type="text" id="version-description"
                                                                     name="product-description"
-                                                                    placeholder="Особливості цієї версії товару" />
+                                                                    value="<%= vDescVal %>"
+                                                                    placeholder="Особливості цієї версії товару"
+                                                                    style="border: <%= vDescErr != null ? "1.5px solid #e74c3c; background-color: #fff6f6;" : "" %>" />
+                                                                <% if (vDescErr != null) { %>
+                                                                    <div style="color: #c0392b; font-size: 0.85rem; margin-top: 4px; font-weight: 500;">&#9888; <%= vDescErr %></div>
+                                                                <% } %>
                                                             </div>
 
                                                             <div class="admin-form-group">
                                                                 <label for="version-slug">Доповнення до Slug
                                                                     товару:</label>
                                                                 <input type="text" id="version-slug" name="product-slug"
-                                                                    placeholder="cosmic-red" />
+                                                                    value="<%= vSlugVal %>"
+                                                                    placeholder="cosmic-red"
+                                                                    style="border: <%= vSlugErr != null ? "1.5px solid #e74c3c; background-color: #fff6f6;" : "" %>" />
+                                                                <% if (vSlugErr != null) { %>
+                                                                    <div style="color: #c0392b; font-size: 0.85rem; margin-top: 4px; font-weight: 500;">&#9888; <%= vSlugErr %></div>
+                                                                <% } %>
                                                             </div>
 
                                                             <div class="row-3">
@@ -309,26 +362,47 @@
                                                                     <label for="version-price">Ціна версії:</label>
                                                                     <input type="number" step="0.01" min="0.01"
                                                                         id="version-price" name="product-price"
-                                                                        placeholder="16999.00" />
+                                                                        value="<%= vPriceVal %>"
+                                                                        placeholder="16999.00"
+                                                                        style="border: <%= vPriceErr != null ? "1.5px solid #e74c3c; background-color: #fff6f6;" : "" %>" />
+                                                                    <% if (vPriceErr != null) { %>
+                                                                        <div style="color: #c0392b; font-size: 0.85rem; margin-top: 4px; font-weight: 500;">&#9888; <%= vPriceErr %></div>
+                                                                    <% } %>
                                                                 </div>
                                                                 <div>
                                                                     <label for="version-stock">Кількість на
                                                                         складі:</label>
                                                                     <input type="number" step="1" id="version-stock"
-                                                                        name="product-stock" placeholder="5" />
+                                                                        name="product-stock"
+                                                                        value="<%= vStockVal %>"
+                                                                        placeholder="5"
+                                                                        style="border: <%= vStockErr != null ? "1.5px solid #e74c3c; background-color: #fff6f6;" : "" %>" />
+                                                                    <% if (vStockErr != null) { %>
+                                                                        <div style="color: #c0392b; font-size: 0.85rem; margin-top: 4px; font-weight: 500;">&#9888; <%= vStockErr %></div>
+                                                                    <% } %>
                                                                 </div>
                                                                 <div>
                                                                     <label for="version-order">Порядок у
                                                                         переліку:</label>
                                                                     <input type="number" step="1" id="version-order"
-                                                                        name="product-order" placeholder="1" />
+                                                                        name="product-order"
+                                                                        value="<%= vOrderVal %>"
+                                                                        placeholder="1"
+                                                                        style="border: <%= vOrderErr != null ? "1.5px solid #e74c3c; background-color: #fff6f6;" : "" %>" />
+                                                                    <% if (vOrderErr != null) { %>
+                                                                        <div style="color: #c0392b; font-size: 0.85rem; margin-top: 4px; font-weight: 500;">&#9888; <%= vOrderErr %></div>
+                                                                    <% } %>
                                                                 </div>
                                                             </div>
 
                                                             <div class="admin-form-group">
                                                                 <label for="version-image">Зображення:</label>
                                                                 <input type="file" id="version-image"
-                                                                    name="product-image" />
+                                                                    name="product-image"
+                                                                    style="border: <%= vImageErr != null ? "1.5px solid #e74c3c; background-color: #fff6f6;" : "" %>" />
+                                                                <% if (vImageErr != null) { %>
+                                                                    <div style="color: #c0392b; font-size: 0.85rem; margin-top: 4px; font-weight: 500;">&#9888; <%= vImageErr %></div>
+                                                                <% } %>
                                                             </div>
 
                                                             <button type="submit">Додати</button>

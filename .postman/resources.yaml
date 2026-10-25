@@ -1,0 +1,11 @@
+# Use this workspace to collaborate
+workspace:
+  id: f36cefa7-b472-4904-8107-19d135cc9398
+
+localResources:
+  environments:
+    - ../Local-2.environment.yaml
+
+cloudResources:
+  collections:
+    ../postman/collections/Java231 - Cart API Collection: e4d95bd9-459e-4832-94c5-0f54777ff106

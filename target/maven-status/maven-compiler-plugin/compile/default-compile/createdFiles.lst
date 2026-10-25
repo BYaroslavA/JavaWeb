@@ -12,7 +12,6 @@ step\learning\java231web\models\UserAccessItem.class
 step\learning\java231web\servlets\ProductServlet.class
 step\learning\java231web\ioc\IocServicesModule.class
 step\learning\java231web\rest\RestStatus.class
-step\learning\java231web\servlets\BackServlet.class
 step\learning\java231web\JakartaRestConfiguration.class
 step\learning\java231web\data\dao\ProductSectionDao.class
 step\learning\java231web\services\time\ITimeService.class
@@ -28,7 +27,6 @@ step\learning\java231web\data\dao\ProductSectionDao$1.class
 step\learning\java231web\servlets\StorageServlet.class
 step\learning\java231web\services\storage\IStorageService.class
 step\learning\java231web\filters\AuthFilter.class
-step\learning\java231web\servlets\UserServlet.class
 step\learning\java231web\data\dao\ProductSectionDao$2.class
 step\learning\java231web\data\dao\ProductVersionDao.class
 step\learning\java231web\services\form\IFormParseService.class
@@ -37,7 +35,6 @@ step\learning\java231web\services\form\MixedFormParseService$1.class
 step\learning\java231web\data\dao\ProductDao.class
 step\learning\java231web\data\dto\Product.class
 step\learning\java231web\services\hash\IHashService.class
-step\learning\java231web\data\models\AdminProductViewModel.class
 step\learning\java231web\dao\UserDao.class
 step\learning\java231web\services\db\MySqlDbService.class
 step\learning\java231web\services\time\ITimestampService.class

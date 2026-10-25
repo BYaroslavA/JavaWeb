@@ -26,6 +26,7 @@ import step.learning.java231web.data.dto.ProductSection;
 import step.learning.java231web.data.dto.ProductVersion;
 import step.learning.java231web.data.models.AdminProductViewModel;
 import step.learning.java231web.models.ProductFormModel;
+import step.learning.java231web.models.ProductVersionFormModel;
 import step.learning.java231web.models.SectionFormModel;
 import step.learning.java231web.services.db.IDbService;
 import step.learning.java231web.services.form.FormParseResult;
@@ -96,43 +97,44 @@ public class AdminServlet extends HttpServlet {
                             || fields.containsKey("product-id");
 
                     if (isVersion) {
-                        FileItem image = files.get("product-image");
-                        String savedFileName = null;
-                        if (image != null && storageService != null && image.getSize() > 0) {
-                            savedFileName = storageService.save(image);
+                        ProductVersionFormModel versionModel = ProductVersionFormModel.fromFormParseResult(form);
+                        Map<String, String> validationErrors = versionModel.getValidationErrors();
+
+                        if (!validationErrors.isEmpty()) {
+                            req.setAttribute("versionValidationErrors", validationErrors);
+                            req.setAttribute("versionFormFields", fields);
+                            req.setAttribute("formError", "Виявлено помилки валідації версії товару! Будь ласка, виправте виділені поля форми.");
+                            viewModel.setExceptionMessage("Помилки валідації версії: " + String.join(", ", validationErrors.keySet()));
+                        } else {
+                            FileItem image = versionModel.getImageItem();
+                            String savedFileName = null;
+                            if (image != null && storageService != null && image.getSize() > 0) {
+                                savedFileName = storageService.save(image);
+                            }
+
+                            ProductVersion version = new ProductVersion();
+                            version.setId(UUID.randomUUID().toString());
+                            version.setProductId(versionModel.getProductId());
+                            version.setTitle(versionModel.getTitle());
+                            version.setDescription(versionModel.getDescription());
+                            version.setSlug(versionModel.getSlug());
+                            try {
+                                version.setPrice(Double.parseDouble(versionModel.getPrice().trim().replace(',', '.')));
+                            } catch (Exception ignored) {}
+                            try {
+                                version.setStock(Integer.parseInt(versionModel.getStock().trim()));
+                            } catch (Exception ignored) {}
+                            try {
+                                version.setOrder(Integer.parseInt(versionModel.getOrder().trim()));
+                            } catch (Exception ignored) {}
+                            version.setImageUrl(savedFileName);
+
+                            if (productVersionDao != null) {
+                                productVersionDao.addProductVersion(version);
+                            }
+
+                            viewModel.setOkMessage("Версію товару успішно додано: " + (version.getTitle() != null ? version.getTitle() : ""));
                         }
-
-                        ProductVersion version = new ProductVersion();
-                        version.setId(UUID.randomUUID().toString());
-                        version.setProductId(fields.get("product-id"));
-                        version.setTitle(fields.get("product-title"));
-                        version.setDescription(fields.get("product-description"));
-                        version.setSlug(fields.get("product-slug"));
-                        try {
-                            String priceStr = fields.get("product-price");
-                            if (priceStr != null && !priceStr.trim().isEmpty()) {
-                                version.setPrice(Double.parseDouble(priceStr.trim()));
-                            }
-                        } catch (Exception ignored) {}
-                        try {
-                            String stockStr = fields.get("product-stock");
-                            if (stockStr != null && !stockStr.trim().isEmpty()) {
-                                version.setStock(Integer.parseInt(stockStr.trim()));
-                            }
-                        } catch (Exception ignored) {}
-                        try {
-                            String orderStr = fields.get("product-order");
-                            if (orderStr != null && !orderStr.trim().isEmpty()) {
-                                version.setOrder(Integer.parseInt(orderStr.trim()));
-                            }
-                        } catch (Exception ignored) {}
-                        version.setImageUrl(savedFileName);
-
-                        if (productVersionDao != null) {
-                            productVersionDao.addProductVersion(version);
-                        }
-
-                        viewModel.setOkMessage("Версію товару успішно додано: " + (version.getTitle() != null ? version.getTitle() : ""));
                     } else {
                         ProductFormModel model = ProductFormModel.fromFormParseResult(form);
                         Map<String, String> validationErrors = model.getValidationErrors();

@@ -1,0 +1,6 @@
+name: Local
+values:
+  - key: host
+    value: 'http://localhost:8080/java231web'
+  - key: user6
+    value: 024ad494-bafd-11f1-9d1a-84ba59d7b864

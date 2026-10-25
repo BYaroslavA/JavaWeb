@@ -6,6 +6,7 @@ import step.learning.java231web.servlets.*;
 
 /**
  * Модуль конфігурації сервлетів (і фільтрів) інжектора
+ * 
  * @author Lector
  */
 public class IocServletsModule extends ServletModule {
@@ -16,20 +17,21 @@ public class IocServletsModule extends ServletModule {
         // з фільтрів та сервлетів, а також прибрати їх з web.xml
         // До фільтрів та сервлетів НЕОБХІДНО додати анотацію
         // @Singleton
-        filter("/*").through( EncodingFilter.class );
-        filter("/*").through( CorsFilter.class     );
-        filter("/*").through( AuthFilter.class     );
+        filter("/*").through(EncodingFilter.class);
+        filter("/*").through(CorsFilter.class);
+        filter("/*").through(AuthFilter.class);
 
-        serve("/"     ).with( HomeServlet.class  );
-        serve("/about").with( AboutServlet.class );
-        serve("/gson" ).with( GsonServlet.class  );
-        serve("/db"   ).with( DbServlet.class    );
-        serve("/back" ).with( BackServlet.class  );
-        serve("/admin", "/admin/*").with( AdminServlet.class );
-        serve("/user", "/user/*", "/User/*").with( UserServlet.class );
-        serve("/section", "/section/*").with( ProductSectionServlet.class );
-        serve("/product", "/product/*").with( ProductServlet.class );
-        serve("/storage", "/storage/*").with( StorageServlet.class );
+        serve("/").with(HomeServlet.class);
+        serve("/about").with(AboutServlet.class);
+        serve("/gson").with(GsonServlet.class);
+        serve("/db").with(DbServlet.class);
+        serve("/back").with(BackServlet.class);
+        serve("/admin", "/admin/*").with(AdminServlet.class);
+        serve("/user", "/user/*", "/User/*", "/api/user", "/api/user/*", "/api/User/*").with(UserServlet.class);
+        serve("/section", "/section/*", "/api/section", "/api/section/*").with(ProductSectionServlet.class);
+        serve("/product", "/product/*", "/api/product", "/api/product/*").with(ProductServlet.class);
+        serve("/storage", "/storage/*", "/api/storage", "/api/storage/*").with(StorageServlet.class);
+        serve("/cart", "/cart/*", "/api/cart", "/api/cart/*").with(CartServlet.class);
     }
 
 }
