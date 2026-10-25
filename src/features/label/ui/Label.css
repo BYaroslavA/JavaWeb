@@ -1,0 +1,21 @@
+.site-label {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+.site-label svg {
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+}
+.site-label p {
+    font-size: 1em;
+    font-weight: 600;
+    margin: 5px 10px;
+    position: relative;
+    text-align: center;
+}

@@ -1,0 +1,37 @@
+.app-modal {
+    background-color: #888888cc;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100vw;
+    height: 100vh;
+    position: fixed;
+    left: 0;
+    top: 0;
+    z-index: 2;
+}
+.app-modal-dlg {
+    background-color: #1d1d1d;
+    width: 25%;
+    min-width: 300px;
+    height: 25%;
+    min-height: 300px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+}
+.app-modal-title {
+    margin-top: 0.5em;
+}
+.app-modal-message {
+    flex: 1;
+    margin: 0 0.5em;
+    overflow-y: auto;
+}
+.app-modal-footer {
+    display: flex;
+    justify-content: space-evenly;
+    margin: 1em;
+    width: 100%;
+}

@@ -1,0 +1,22 @@
+main {
+    flex: 1;
+}
+header, footer {
+    background-color: #0C0C0C;
+}
+footer {
+    color:#d1d1d1;
+}
+.navbar-brand {
+    color: snow;
+}
+.nav-item {
+    min-width: 130px;
+}
+.nav-link i {
+    font-size: 1.75em;
+    margin-right: .25em;
+}
+.nav-search {
+    background-color: #1d1d1d;
+}

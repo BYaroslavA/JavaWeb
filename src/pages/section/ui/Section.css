@@ -1,0 +1,177 @@
+﻿.section-page {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    padding-bottom: 2rem;
+}
+
+.section-page-header {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.section-breadcrumbs {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.9rem;
+    color: #94a3b8;
+}
+
+.breadcrumb-link {
+    color: #38bdf8;
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+.breadcrumb-link:hover {
+    color: #60a5fa;
+    text-decoration: underline;
+}
+
+.breadcrumb-separator {
+    color: #475569;
+}
+
+.breadcrumb-current {
+    color: #cbd5e1;
+}
+
+.section-main-title {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: #f8fafc;
+    margin: 0;
+}
+
+.highlight-title {
+    color: #60a5fa;
+}
+
+/* ======================================================== */
+/* БЛОК ПІДГРУП ТОВАРНОЇ ГРУПИ                             */
+/* ======================================================== */
+.section-subgroups-wrapper {
+    background: linear-gradient(180deg, rgba(30, 30, 36, 0.6) 0%, rgba(20, 20, 24, 0.8) 100%);
+    border: 1px solid rgba(59, 130, 246, 0.2);
+    border-radius: 16px;
+    padding: 1.25rem 1.25rem 1.5rem 1.25rem;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+}
+
+.section-subgroups-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.section-subgroups-heading {
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: #f1f5f9;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.heading-icon {
+    font-size: 1.1rem;
+}
+
+.subgroups-badge {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: #60a5fa;
+    background: rgba(59, 130, 246, 0.12);
+    border: 1px solid rgba(59, 130, 246, 0.3);
+    padding: 3px 10px;
+    border-radius: 9999px;
+}
+
+.section-subgroups-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 14px;
+}
+
+.subgroup-card-wrapper {
+    display: flex;
+}
+
+.subgroup-card-wrapper .subsection-card {
+    min-height: 150px;
+}
+
+/* ======================================================== */
+/* БЛОК ТОВАРІВ                                            */
+/* ======================================================== */
+.section-products-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.section-products-heading {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #f1f5f9;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.products-container {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 1.5%;
+}
+
+.products-container .product-card {
+    margin-bottom: 1.5%;
+    width: 23.8%;
+}
+
+.section-empty-box {
+    padding: 2.5rem 1rem;
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px dashed rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    text-align: center;
+    color: #94a3b8;
+}
+
+.section-empty-box .hint {
+    color: #60a5fa;
+    font-size: 0.9rem;
+    margin-top: 0.5rem;
+}
+
+/* Tablet */
+@media screen and (max-width: 768px) {
+    .products-container .product-card {
+        width: 48.5%;
+    }
+    .section-subgroups-grid {
+        grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+    }
+}
+
+/* Mobile */
+@media screen and (max-width: 576px) {
+    .products-container .product-card {
+        width: 100%;
+    }
+    .section-subgroups-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 8px;
+    }
+}

@@ -1,0 +1,24 @@
+.content-container {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 1.5%;
+}
+
+.content-container .section-card {
+    width: 23.8%;
+}
+
+/* Tablet */
+@media screen and (max-width: 768px) {  
+    .content-container .section-card {
+        width: 48.5%;
+    }
+}
+
+/* Mobile */
+@media screen and (max-width: 576px) {  
+    .content-container .section-card {
+        width: 100%;
+    }
+}

@@ -1,0 +1,32 @@
+body {
+    margin: 0;
+    padding: 0;
+}
+#root {
+  background-color: #0C0C0C;
+  color: #C0C0C0;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 100vh;
+  width: 100%;
+}
+.preloader {
+  background-color: #777777cc;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100vw;
+  height: 100vh;
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 1;
+}
+.preloader-content {
+  background-color: #1d1d1d;
+  width: 25%;
+  min-width: 300px;
+  height: 25%;
+  min-height: 300px;
+}
